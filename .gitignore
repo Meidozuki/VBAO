@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+cmake-build-debug-mingw_qt/
+.idea/
+CMakeLists.txt.user
