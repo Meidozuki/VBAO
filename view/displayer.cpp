@@ -4,7 +4,6 @@
 #include <string>
 #include <cassert>
 
-#include <QTime>
 #include <QString>
 #include <QPushButton>
 
@@ -39,13 +38,6 @@ void Displayer::onClick() {
 void Displayer::updateNumber() {
     QString text=QString::fromStdString(*pNumber_);
     ui->lcdNumber->display(text);
-}
-
-std::string Displayer::init() {
-    QTime time = QTime::currentTime();
-    QString text = time.toString("hh:mm");
-    ui->lcdNumber->display(text);
-    return text.toStdString();
 }
 
 

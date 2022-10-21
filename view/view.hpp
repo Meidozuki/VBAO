@@ -17,10 +17,9 @@ public:
     View();
 
     std::shared_ptr<vbao::CommandVBase> cmd_add_;
-    Displayer* displayer_;
+    std::shared_ptr<Displayer> displayer_;
 
     void setContent(Displayer &displayer);
-    void init();
 };
 
 #endif //LIBTEST_VIEW_VIEW_HPP_

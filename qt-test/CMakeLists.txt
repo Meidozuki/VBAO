@@ -1,35 +1,35 @@
 cmake_minimum_required(VERSION 3.16)
-project(libtest)
+project(qtHello)
 set(CMAKE_CXX_STANDARD 17)
 
 # include lib
-include_directories("D:/coding/mvvm/library")
+include_directories("../Lib_VBao")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "D:/coding/qt/qt_template")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
 
 find_package(Qt MODULE)
 
-qt_add_executable(libtest
+qt_add_executable(qtHello
         MANUAL_FINALIZATION
         main.cpp view.cpp view.h view.ui)
 
-target_link_libraries(libtest PUBLIC
+target_link_libraries(qtHello PUBLIC
         Qt::Gui
         Qt::Widgets
         )
 
-set_target_properties(libtest PROPERTIES
+set_target_properties(qtHello PROPERTIES
         MACOSX_BUNDLE TRUE
         WIN32_EXECUTABLE TRUE
         )
 
-install(TARGETS libtest
+install(TARGETS qtHello
         BUNDLE DESTINATION .
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(libtest)
+    qt_finalize_executable(qtHello)
 endif()
 

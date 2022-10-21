@@ -8,6 +8,7 @@
 
 #include "VBaoBase.hpp"
 namespace vbao {
+using vbao::CommandVBase;
 
 template<typename VMType, typename ArgType>
 class TCommand : public vbao::CommandVBase{

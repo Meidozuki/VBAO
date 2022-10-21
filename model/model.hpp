@@ -9,7 +9,6 @@
 #include <memory>
 #include <string>
 
-#include "VBAO/VBaoBase.hpp"
 #include "VBAO/model.hpp"
 
 class Model : public vbao::ModelBase {

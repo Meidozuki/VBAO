@@ -3,17 +3,17 @@ project(libtest)
 set(CMAKE_CXX_STANDARD 17)
 
 # include lib
-include_directories("./library")
+include_directories("Lib_VBao")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "D:/coding/qt/qt_template")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/qt-test)
 find_package(Qt MODULE)
 
 set(SRC_LIST
-        main.cpp displayer.cpp displayer.h displayer.ui
+        main.cpp view/displayer.cpp view/displayer.h view/displayer.ui
         model/model.cpp
-        viewmodel/viewmodel.cpp viewmodel/viewmodel_sink.cpp viewmodel/viewmodel_command.cpp
+        viewmodel/viewmodel.cpp viewmodel/viewmodel_listener.cpp viewmodel/viewmodel_command.cpp
         window/window.cpp window/window_listener.cpp view/view.cpp)
 
 add_executable(libtest
@@ -36,4 +36,3 @@ install(TARGETS libtest
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(libtest)
 endif()
-

@@ -8,13 +8,11 @@
 #include <memory>
 
 #include "VBAO/VBaoBase.hpp"
-#include "VBAO/listener.hpp"
 
 #include "view/view.hpp"
-#include "displayer.h"
+#include "view/displayer.h"
 #include "window_listener.hpp"
 
-//不能直接继承QT，需要另想办法
 class Window  {
 public:
     View view_;
@@ -22,7 +20,7 @@ public:
     std::shared_ptr<vbao::CommandVBase> cmd_add_;
 
     std::shared_ptr<WindowPropertyListener> prop_sink_;
-    std::unique_ptr<WindowCommandListener> cmd_sink_;//之后再写
+    std::unique_ptr<WindowCommandListener> cmd_sink_;
 
     vbao::CommandNotificationVBase *getCmdSink() const {
         return cmd_sink_.get();

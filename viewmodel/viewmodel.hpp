@@ -10,7 +10,7 @@
 #include "VBAO/viewmodel.hpp"
 
 #include "model/model.hpp"
-#include "viewmodel_sink.hpp"
+#include "viewmodel_listener.hpp"
 #include "viewmodel_command.hpp"
 
 class Viewmodel : public vbao::TViewModelBase<Model> {

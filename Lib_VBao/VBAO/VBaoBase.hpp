@@ -28,11 +28,17 @@ public:
     virtual void execute() = 0;
 };
 
+/**
+ * @brief 属性变动通知抽象基类，需要实现onPropertyChanged
+ */
 class PropertyNotificationVBase {
 public:
     virtual void onPropertyChanged(const std::string& prop_name) = 0;
 };
 
+/**
+ * @brief 属性变动通知抽象基类，需要实现onCommandComplete
+ */
 class CommandNotificationVBase{
 public:
     virtual void onCommandComplete(const std::string& cmd_name, bool bOK) = 0;

@@ -8,4 +8,11 @@
 #include <string>
 #include <memory>
 
+#include <QTime>
+
+inline std::string init_time() {
+    QTime time = QTime::currentTime();
+    return time.toString("hh:mm").toStdString();
+}
+
 #endif //LIBTEST__SMART_PTR_H_
