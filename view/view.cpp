@@ -8,15 +8,7 @@
 
 #include "displayer.h"
 
-View::View() {
+View::View():displayer_(std::make_shared<Displayer>()) {
+    displayer_->view_ = this;
 
-}
-void View::setContent(Displayer &displayer) {
-    displayer_ = &displayer;
-    displayer.view_ = this;
-}
-
-void View::init() {
-    assert(displayer_ != nullptr);
-    displayer_->init();
 }

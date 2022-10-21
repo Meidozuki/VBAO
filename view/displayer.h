@@ -25,9 +25,10 @@ public:
     ~Displayer();
 
     View *view_;
-    std::string init();
 
-    void setNumber(std::shared_ptr<std::string> sp) {pNumber_=std::move(sp);}
+    void setNumber(std::shared_ptr<std::string> sp) {
+        pNumber_=std::move(sp);
+    }
     void updateNumber();
     std::shared_ptr<std::string> pNumber_;
 

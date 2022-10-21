@@ -5,7 +5,7 @@
 #pragma once
 
 #include <memory>
-#include <cassert>
+#include <stdexcept>
 
 #include "VBaoBase.hpp"
 #include "listener.hpp"
@@ -46,13 +46,15 @@ public:
         cmd_notice_.fireOnCommandComplete(str, bOK);
     }
     void bindModel(ModelBase *model) {
+        //addPropertyListener形参为基类指针
         model->addPropertyListener(listener_.get());
     }
 
 protected:
     [[nodiscard]] ModelType* getModel() const {
-        //TODO(weak):改善报错
-        assert(model_.get() != nullptr);
+        if (model_.get() == nullptr) {
+            throw std::runtime_error("You should't get Model before VM sets it!\n");
+        }
         return model_.get();
     }
 
@@ -64,7 +66,6 @@ protected:
     void setModel(std::unique_ptr<ModelType> &&pModel) {
         //直接赋值，不需要cast，故使用move
         model_ = std::move(pModel);
-        //addPropertyListener形参为基类指针
         bindModel(model_.get());
     }
 
