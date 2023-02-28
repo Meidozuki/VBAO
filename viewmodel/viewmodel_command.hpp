@@ -9,9 +9,16 @@
 
 class Viewmodel;
 
-class ViewmodelCommand : public vbao::TCommand<Viewmodel,void> {
+class ViewmodelAddTimeCommand : public vbao::TCommand<Viewmodel, void> {
 public:
-    explicit ViewmodelCommand(Viewmodel *vm);
+    explicit ViewmodelAddTimeCommand(Viewmodel *vm);
+
+    void execute() override;
+};
+
+class ViewmodelSumCommand : public vbao::TCommand<Viewmodel, void> {
+public:
+    explicit ViewmodelSumCommand(Viewmodel *vm);
 
     void execute() override;
 };

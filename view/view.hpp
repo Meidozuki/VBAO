@@ -11,15 +11,15 @@
 
 class Displayer;
 
+//不清楚套入qt体系是否会引发error，额外写了一个view类
 //更像一个notifier
 class View {
 public:
     View();
 
-    std::shared_ptr<vbao::CommandVBase> cmd_add_;
+    std::shared_ptr<vbao::CommandVBase> cmd_add_, cmd_sum_;
     std::shared_ptr<Displayer> displayer_;
 
-    void setContent(Displayer &displayer);
 };
 
 #endif //LIBTEST_VIEW_VIEW_HPP_

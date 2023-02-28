@@ -22,3 +22,7 @@ void Model::addNumber()  {
 
     setNumber(ss.str());
 }
+
+int Model::calSum(int a,int b) {
+    return a+b;
+}
