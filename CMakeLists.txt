@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(libtest)
+project(VBAOTest)
 set(CMAKE_CXX_STANDARD 17)
 
 # include lib
@@ -26,23 +26,23 @@ if(WIN32)
     endforeach()
 endif(WIN32)
 
-add_executable(libtest
+add_executable(VBAOTest
         ${SRC_LIST})
 
-target_link_libraries(libtest PUBLIC
+target_link_libraries(VBAOTest PUBLIC
         Qt::Gui
         Qt::Widgets
         )
 
-set_target_properties(libtest PROPERTIES
+set_target_properties(VBAOTest PROPERTIES
         MACOSX_BUNDLE TRUE
         WIN32_EXECUTABLE TRUE
         )
 
-install(TARGETS libtest
+install(TARGETS VBAOTest
         BUNDLE DESTINATION .
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(libtest)
+    qt_finalize_executable(VBAOTest)
 endif()
