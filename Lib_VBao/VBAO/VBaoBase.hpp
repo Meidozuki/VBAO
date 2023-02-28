@@ -43,6 +43,7 @@ public:
 class PropertyNotificationVBase {
 public:
     virtual void onPropertyChanged(const std::string& prop_name) = 0;
+    virtual ~PropertyNotificationVBase() = default;
 };
 
 /**
@@ -51,6 +52,7 @@ public:
 class CommandNotificationVBase{
 public:
     virtual void onCommandComplete(const std::string& cmd_name, bool bOK) = 0;
+    virtual ~CommandNotificationVBase() = default;
 };
 
 //---通知接口类
