@@ -1,0 +1,27 @@
+digraph{
+    subgraph cluster{
+        label = "    data-binding    "
+
+        node[shape=rectangle]
+        v[label="View"]
+        vm[label="Viewmodel"]
+        m[label="Model"]
+
+        v->vm[style=invis]
+        vm->v[label="shared ptr"]
+        vm->m[label="shared ptr"]
+    }
+
+    subgraph cluster2{
+        label = "command-binding"
+        
+        node[shape=rectangle]
+        v2[label="View"]
+        vm2[label="Viewmodel"]
+        m2[label="Model"]
+
+        v2->vm2[style=invis]
+        vm2->v2[label="provide\ncommand"]
+        vm2->m2[label="command\nlogic",style=dashed]
+    }
+}
