@@ -1,0 +1,13 @@
+digraph{
+    node[shape=rectangle]
+    v[label="View"]
+    vm[label="Viewmodel"]
+    m[label="Model"]
+
+    
+    v->vm[label="prop-\nlistener"]
+    v->vm[label="cmd-\nlistener"]
+    vm->m[label="prop-listener"]
+
+    
+}

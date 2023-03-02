@@ -1,0 +1,15 @@
+digraph{
+    ranksep=0.7
+    node[shape=rectangle]
+    v[label="View"]
+    vm[label="Viewmodel"]
+    m[label="Model"]
+
+    v->vm[label="1.trigger\ncommand"]
+    vm->m[label="2.transmit",style=dashed]
+    m->m[label="3.execute",headport=s,tailport=s]
+    m->vm[label="4.prop changed",style=dashed]
+    vm->v[label="5.prop changed",style=dashed]
+    m->vm[label="6.finished"]
+    vm->v[label="7.report\nresult"]
+}

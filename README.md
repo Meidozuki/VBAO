@@ -2,7 +2,23 @@
 
 > A library aiming for building an MVVM (or MVFM) project
 
-### 文件树
+## What happened
+
+We implement the data-binding, command-binding and property-change-notification to form an MVVM system.
+
+![](img/binding.dot.jpg)
+
+data-binding & command-binding
+
+![](img/changing.dot.jpg)
+
+property-change-notification
+
+When we make it, the interaction among them is as follows.
+
+![](img/action.dot.jpg)
+
+### Filetree
 
 ├── qt-test
 
