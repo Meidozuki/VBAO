@@ -12,10 +12,10 @@ WindowPropertyListener::WindowPropertyListener(Window *p) : PropertyListener(p)
 
 void WindowPropertyListener::onPropertyChanged(const std::string &prop_name) {
     if (prop_name == "time") {
-        pNotify_->view_.displayer_->updateTime();
+        pNotify_->view_.updateTime();
     }
     else if (prop_name == "sum") {
-        pNotify_->view_.displayer_->updateSumResult();
+        pNotify_->view_.updateSumResult();
     }
 }
 WindowCommandListener::WindowCommandListener(Window *p) : CommandListener(p)

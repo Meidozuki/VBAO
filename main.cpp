@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 
     pVM->setInitNumber(init_time());
     //test
-    window.view_.displayer_->onClick();
+    window.view_.onClick();
 
-    window.view_.displayer_->show();
+    window.view_.show();
     return QApplication::exec();
 }

@@ -14,7 +14,7 @@ set(SRC_LIST
         main.cpp view/displayer.cpp view/displayer.h view/displayer.ui
         model/model.cpp
         viewmodel/viewmodel.cpp viewmodel/viewmodel_listener.cpp viewmodel/viewmodel_command.cpp
-        window/window.cpp window/window_listener.cpp view/view.cpp app.cpp)
+        window/window.cpp window/window_listener.cpp app.cpp)
 
 #Unicode
 if(WIN32)

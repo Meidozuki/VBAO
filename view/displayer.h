@@ -3,13 +3,14 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include <QWidget>
 #include <QLCDNumber>
 #include <QSlider>
-#include <utility>
 
-class View;
+#include "VBAO/VBaoBase.hpp"
+
 
 
 namespace Ui {
@@ -25,13 +26,13 @@ public:
     explicit Displayer(QWidget *parent = nullptr);
     ~Displayer();
 
-    View *view_;
-
     void updateTime();
     void updateSumResult();
 
     std::shared_ptr<std::string> pNumber_;
     std::shared_ptr<int> pNumberA_,pNumberB_,pNumber_sum_;
+
+    std::shared_ptr<vbao::CommandVBase> cmd_add_, cmd_sum_;
 
     //默认的setter是const&，会在末端引用计数增加，仅绑定一次，接收右值，改用&&
     void setNumber(std::shared_ptr<std::string> &&sp) {
@@ -58,5 +59,10 @@ public slots:
 private:
     Ui::Displayer *ui;
 };
+
+class View : public Displayer {
+
+};
+
 
 #endif // VIEW_H

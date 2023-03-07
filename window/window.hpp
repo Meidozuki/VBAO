@@ -9,7 +9,6 @@
 
 #include "VBAO/VBaoBase.hpp"
 
-#include "view/view.hpp"
 #include "view/displayer.h"
 #include "window_listener.hpp"
 
