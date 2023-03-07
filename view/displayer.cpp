@@ -8,15 +8,11 @@
 #include <QString>
 #include <QPushButton>
 
-#include "view/view.hpp"
-
 Displayer::Displayer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Displayer)
 {
     ui->setupUi(this);
-
-    view_= nullptr;
 
     connect(ui->pushButton,
             &QPushButton::clicked,
@@ -53,9 +49,7 @@ Displayer::~Displayer()
 
 void Displayer::onClick() {
     //不清楚能不能多态，先写个wrapper
-    assert(view_ != nullptr);
-    assert(view_->cmd_add_ != nullptr);
-    view_->cmd_add_->execute();
+    this->cmd_add_->execute();
 }
 
 void Displayer::updateTime() {
@@ -77,8 +71,6 @@ void Displayer::updateSumResult() {
 }
 
 void Displayer::onSlideEnd() {
-    assert(view_ != nullptr);
-    assert(view_->cmd_sum_ != nullptr);
-    view_->cmd_sum_->execute();
+    this->cmd_sum_->execute();
 }
 
