@@ -2,12 +2,16 @@ cmake_minimum_required(VERSION 3.16)
 project(VBAOTest)
 set(CMAKE_CXX_STANDARD 17)
 
-# include lib
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "..." FORCE)
+endif()
+
+# include the VBAO library
 include_directories("Lib_VBao")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/qt-test)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/qt-test)
 find_package(Qt MODULE)
 
 # test if qt is available
@@ -50,3 +54,10 @@ install(TARGETS VBAOTest
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(VBAOTest)
 endif()
+
+# process VBAO library
+
+file(GLOB Lib_files Lib_VBao/VBAO/*)
+add_library(VBAO STATIC ${Lib_files})
+
+install(TARGETS VBAO)
