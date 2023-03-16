@@ -33,4 +33,5 @@
 
 cmake-build-debug-mingw_qt/
 .idea/
+build/
 CMakeLists.txt.user
