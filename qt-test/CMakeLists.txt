@@ -25,10 +25,6 @@ set_target_properties(qtHello PROPERTIES
         WIN32_EXECUTABLE TRUE
         )
 
-install(TARGETS qtHello
-        BUNDLE DESTINATION .
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(qtHello)
 endif()

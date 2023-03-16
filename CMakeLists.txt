@@ -10,11 +10,15 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/qt-test)
 find_package(Qt MODULE)
 
+# test if qt is available
+add_subdirectory(qt-test)
+
 set(SRC_LIST
-        main.cpp view/displayer.cpp view/displayer.h view/displayer.ui
         model/model.cpp
         viewmodel/viewmodel.cpp viewmodel/viewmodel_listener.cpp viewmodel/viewmodel_command.cpp
-        window/window.cpp window/window_listener.cpp app.cpp)
+        view/displayer.cpp view/displayer.h view/displayer.ui
+        window/window.cpp window/window_listener.cpp
+        app/main.cpp app/app.cpp)
 
 #Unicode
 if(WIN32)
