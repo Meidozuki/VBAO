@@ -5,7 +5,7 @@
 #ifndef LIBTEST_VIEWMODEL_VIEWMODEL_HPP_
 #define LIBTEST_VIEWMODEL_VIEWMODEL_HPP_
 
-#include "common_parameter.h"
+#include "app/common_parameter.h"
 
 #include "VBAO/viewmodel.hpp"
 
