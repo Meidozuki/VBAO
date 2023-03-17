@@ -58,6 +58,16 @@ endif()
 # process VBAO library
 
 file(GLOB Lib_files Lib_VBao/VBAO/*)
-add_library(VBAO STATIC ${Lib_files})
+option(VBAO_BUILD_DYNAMIC "whether to build dynamic or static lib" FALSE)
 
-install(TARGETS VBAO)
+if (VBAO_BUILD_DYNAMIC)
+    add_library(VBAO SHARED ${Lib_files})
+    install(TARGETS VBAO)
+else()
+    add_library(VBAO STATIC ${Lib_files})
+    install(TARGETS VBAO)
+endif()
+
+install(FILES ${Lib_files} DESTINATION include)
+
+include(CPack)
