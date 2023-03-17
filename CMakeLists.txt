@@ -20,7 +20,7 @@ add_subdirectory(qt-test)
 set(SRC_LIST
         model/model.cpp
         viewmodel/viewmodel.cpp viewmodel/viewmodel_listener.cpp viewmodel/viewmodel_command.cpp
-        view/displayer.cpp view/displayer.h view/displayer.ui
+        view/displayer.cpp
         window/window.cpp window/window_listener.cpp
         app/main.cpp app/app.cpp)
 

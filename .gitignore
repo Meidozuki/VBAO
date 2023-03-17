@@ -31,7 +31,9 @@
 *.out
 *.app
 
-cmake-build-debug-mingw_qt/
 .idea/
 build/
+cmake-build-debug-mingw_qt/
 CMakeLists.txt.user
+
+.xmake/
