@@ -11,8 +11,6 @@
 
 #include "VBAO/VBaoBase.hpp"
 
-
-
 namespace Ui {
 class Displayer;
 }

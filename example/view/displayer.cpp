@@ -1,4 +1,4 @@
-#include "displayer.h"
+#include "displayer.hpp"
 #include "ui_displayer.h"
 
 #include <iostream>

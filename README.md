@@ -2,7 +2,7 @@
 
 > A library aiming for building an MVVM (or MVFM) project
 
-## What happened
+## How does it work?
 
 We implement the data-binding, command-binding and property-change-notification to form an MVVM system.
 

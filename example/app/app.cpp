@@ -1,6 +1,6 @@
 #include "app.hpp"
 
-#include "example/model/model.hpp"
+#include "model/model.hpp"
 
 void init(Viewmodel *pVM,Window *pWin){
 

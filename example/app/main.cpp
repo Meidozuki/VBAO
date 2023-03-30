@@ -1,8 +1,8 @@
 #include <QApplication>
 #include <QPushButton>
 
-#include "example/viewmodel/viewmodel.hpp"
-#include "example/window/window.hpp"
+#include "viewmodel/viewmodel.hpp"
+#include "window/window.hpp"
 #include "common_parameter.h"
 #include "app.hpp"
 

@@ -5,11 +5,11 @@
 #ifndef LIBTEST_VIEWMODEL_VIEWMODEL_HPP_
 #define LIBTEST_VIEWMODEL_VIEWMODEL_HPP_
 
-#include "example/app/common_parameter.h"
+#include "app/common_parameter.h"
 
 #include "VBAO/viewmodel.hpp"
 
-#include "example/model/model.hpp"
+#include "model/model.hpp"
 #include "viewmodel_listener.hpp"
 #include "viewmodel_command.hpp"
 
