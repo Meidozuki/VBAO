@@ -5,11 +5,11 @@
 #ifndef LIBTEST_VIEWMODEL_VIEWMODEL_HPP_
 #define LIBTEST_VIEWMODEL_VIEWMODEL_HPP_
 
-#include "app/common_parameter.h"
+#include "example/app/common_parameter.h"
 
 #include "VBAO/viewmodel.hpp"
 
-#include "model/model.hpp"
+#include "example/model/model.hpp"
 #include "viewmodel_listener.hpp"
 #include "viewmodel_command.hpp"
 
@@ -23,7 +23,7 @@ private:
     std::shared_ptr<std::string> pNumber_;
     std::shared_ptr<int> pNumberA_,pNumberB_,pNumber_sum_;
     ViewmodelListener listener_;
-    std::shared_ptr<ViewmodelAddTimeCommand> pCommand_;
+    std::shared_ptr<ViewmodelAddTimeCommand> pCommand_time;
     std::shared_ptr<ViewmodelSumCommand> pCommand_sum_;
 private:
     //假设model持有数据的情况
@@ -49,7 +49,7 @@ public:
         pNumberB_ = std::make_shared<int>();
         pNumber_sum_ = std::make_shared<int>();
 
-        pCommand_ = std::make_shared<ViewmodelAddTimeCommand>(this);
+        pCommand_time = std::make_shared<ViewmodelAddTimeCommand>(this);
         pCommand_sum_ = std::make_shared<ViewmodelSumCommand>(this);
 
         setListener(std::make_unique<ViewmodelListener>(this));
@@ -65,7 +65,7 @@ public:
     }
 
     auto getCommand() {
-        return std::static_pointer_cast<vbao::CommandVBase>(pCommand_);
+        return std::static_pointer_cast<vbao::CommandVBase>(pCommand_time);
     }
     auto getSumCommand() {
         return std::static_pointer_cast<vbao::CommandVBase>(pCommand_sum_);

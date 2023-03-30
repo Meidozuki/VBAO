@@ -1,6 +1,6 @@
 #include "app.hpp"
 
-#include "model/model.hpp"
+#include "example/model/model.hpp"
 
 void init(Viewmodel *pVM,Window *pWin){
 
@@ -13,7 +13,7 @@ void init(Viewmodel *pVM,Window *pWin){
     pWin->view_.setPNumberSum(pVM->pNumber_sum_);
     //command
     pWin->setCmdAdd(pVM->getCommand());
-    pWin->view_.cmd_add_ = pVM->getCommand();
+    pWin->view_.cmd_time_increase_ = pVM->getCommand();
     pWin->view_.cmd_sum_ = pVM->getSumCommand();
     //notification
     pVM->addPropertyListener(pWin->getPropSink());

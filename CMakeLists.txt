@@ -18,11 +18,11 @@ find_package(Qt MODULE)
 add_subdirectory(qt-test)
 
 set(SRC_LIST
-        model/model.cpp
-        viewmodel/viewmodel.cpp viewmodel/viewmodel_listener.cpp viewmodel/viewmodel_command.cpp
-        view/displayer.cpp
-        window/window.cpp window/window_listener.cpp
-        app/main.cpp app/app.cpp)
+        example/model/model.cpp
+        example/viewmodel/viewmodel.cpp example/viewmodel/viewmodel_listener.cpp example/viewmodel/viewmodel_command.cpp
+        example/view/displayer.cpp
+        example/window/window.cpp example/window/window_listener.cpp
+        example/app/main.cpp example/app/app.cpp)
 
 #Unicode
 if(WIN32)
@@ -71,3 +71,7 @@ endif()
 install(FILES ${Lib_files} DESTINATION include)
 
 include(CPack)
+
+# add pybind
+add_subdirectory(extern/pybind11)
+add_subdirectory(Lib_VBao)

@@ -40,6 +40,8 @@ public:
     TViewModelBase(): prop_notice_(), cmd_notice_(),
                       model_(nullptr), listener_(nullptr) {}
 
+    virtual ~TViewModelBase() = default;
+
     // 添加来自Window的Listener
     void addPropertyListener(PropertyNotificationVBase *p) {
         prop_notice_.addPropertyNotification(p);
