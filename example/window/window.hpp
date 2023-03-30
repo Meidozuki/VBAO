@@ -9,7 +9,7 @@
 
 #include "VBAO/VBaoBase.hpp"
 
-#include "view/displayer.h"
+#include "view/displayer.hpp"
 #include "window_listener.hpp"
 
 class Window  {

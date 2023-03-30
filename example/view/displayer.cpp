@@ -1,4 +1,4 @@
-#include "displayer.h"
+#include "displayer.hpp"
 #include "ui_displayer.h"
 
 #include <iostream>
@@ -49,7 +49,7 @@ Displayer::~Displayer()
 
 void Displayer::onClick() {
     //不清楚能不能多态，先写个wrapper
-    this->cmd_add_->execute();
+    this->cmd_time_increase_->execute();
 }
 
 void Displayer::updateTime() {

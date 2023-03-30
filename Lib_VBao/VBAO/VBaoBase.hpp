@@ -35,6 +35,7 @@ class CommandVBase {
 public:
     virtual void setParameter(const std::any &param) = 0;
     virtual void execute() = 0;
+    virtual ~CommandVBase() = default;
 };
 
 /**
