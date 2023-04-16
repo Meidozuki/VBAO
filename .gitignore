@@ -37,3 +37,5 @@ cmake-build-debug-mingw_qt/
 CMakeLists.txt.user
 
 .xmake/
+
+__pycache__
