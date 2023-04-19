@@ -1,11 +1,21 @@
 from .base import *
 
+DictCons = dict
+
+def use_easydict(b = True):
+    global DictCons
+    if b:
+        from easydict import EasyDict
+        DictCons = EasyDict
+    else:
+        DictCons = dict
+
 
 class Model:
     def __init__(self):
         self.prop_notice = PropertyNotifier()
 
-        self.property = {}
+        self.property = DictCons()
 
     def addPropertyListener(self, listener: PropertyListenerBase):
         self.prop_notice.addNotification(listener)
@@ -21,8 +31,8 @@ class ViewModel:
         self.listener = None
         self.model = None
 
-        self.commands = {}
-        self.property = {}
+        self.commands = DictCons()
+        self.property = DictCons()
 
     def addPropertyListener(self, listener: PropertyListenerBase):
         self.prop_notice.addNotification(listener)
@@ -42,18 +52,37 @@ class ViewModel:
     def setListener(self, listener):
         self.listener = listener
 
+    def runCommand(self, cmd_name: str):
+        """
+        Deprecated. Prefer to run command in View.
+        """
+        if cmd_name not in self.commands.keys():
+            raise ValueError(f"Trying to call an invalid command {cmd_name}. "
+                             f"Candidates are: {self.commands.keys()}")
+
+        self.commands.get(cmd_name).execute()
+
 
 class View:
     def __init__(self):
         self.prop_listener = None
         self.cmd_listener = None
 
-        self.commands = {}
-        self.property = {}
+        self.commands = DictCons()
+        self.property = DictCons()
+
+    def runCommand(self, cmd_name: str):
+        if cmd_name not in self.commands.keys():
+            raise ValueError(f"Trying to call an invalid command {cmd_name}. "
+                             f"Candidates are: {self.commands.keys()}")
+
+        self.commands.get(cmd_name).execute()
 
 
 class App:
-    def bind(self, model, viewmodel, view):
+    def bind(self, model, viewmodel, view, bind_vm_n_model=False):
+        if bind_vm_n_model:
+            viewmodel.bindModel(model)
         # prop bindings
         model.property.update(viewmodel.property)
         view.property.update(viewmodel.property)
