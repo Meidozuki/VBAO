@@ -2,7 +2,8 @@ from .base import *
 
 DictCons = dict
 
-def use_easydict(b = True):
+
+def use_easydict(b=True):
     global DictCons
     if b:
         from easydict import EasyDict
@@ -84,11 +85,11 @@ class App:
         if bind_vm_n_model:
             viewmodel.bindModel(model)
         # prop bindings
-        model.property.update(viewmodel.property)
-        view.property.update(viewmodel.property)
+        model.property = viewmodel.property
+        view.property = viewmodel.property
 
         # cmd bindings
-        view.commands.update(viewmodel.commands)
+        view.commands = viewmodel.commands
 
         # event notification
         model.addPropertyListener(viewmodel.listener)
