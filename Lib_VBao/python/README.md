@@ -1,19 +1,6 @@
 # VBAO
 
-> A lite library aiming for building an MVVM (or MVFM) project.
-
-## Install and start
-
-### Python
-
-```shell
-conda activate YOURENV
-pip install vbao-mvvm
-```
-
-```python
-import vbao
-```
+> A library aiming for building an MVVM (or MVFM) project
 
 ## How does it work?
 
@@ -33,19 +20,26 @@ When we make it, the interaction among them is as follows.
 
 ### Filetree
 
-├── example  
-│   ├── app  
-│   ├── model  
-│   ├── view  
-│   ├── viewmodel  
-│   └── window  
-├── extern  
-│   └── pybind11  
-├── Lib_VBao  
-│   ├── python  
-│   │   ├── vbao  
-│   └── VBAO  
-├── LICENSE  
+├── qt-test
+
+├── Lib_VBao
+
+├── model
+
+├── view
+
+├── viewmodel
+
+├── window
+
+├── common_parameter.h
+
+├── main.cpp
+
+├── CMakeLists.txt
+
+├── LICENSE
+
 └── README.md
 
 
