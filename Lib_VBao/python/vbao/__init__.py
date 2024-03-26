@@ -13,10 +13,13 @@ def use_easydict(b=True):
 
 
 class Model:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.prop_notice = PropertyNotifier()
 
-        self.property = DictCons()
+        # self.property will conflict with Qt
+        # TODO: make a setter function for checking, but self.setProperty conflicts with Qt
+        self.properties = DictCons()
 
     def addPropertyListener(self, listener: PropertyListenerBase):
         self.prop_notice.addNotification(listener)
@@ -26,14 +29,15 @@ class Model:
 
 
 class ViewModel:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.prop_notice = PropertyNotifier()
         self.cmd_notice = CommandNotifier()
         self.listener = None
         self.model = None
 
         self.commands = DictCons()
-        self.property = DictCons()
+        self.properties = DictCons()
 
     def addPropertyListener(self, listener: PropertyListenerBase):
         self.prop_notice.addNotification(listener)
@@ -65,12 +69,13 @@ class ViewModel:
 
 
 class View:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.prop_listener = None
         self.cmd_listener = None
 
         self.commands = DictCons()
-        self.property = DictCons()
+        self.properties = DictCons()
 
     def runCommand(self, cmd_name: str):
         if cmd_name not in self.commands.keys():
@@ -85,8 +90,8 @@ class App:
         if bind_vm_n_model:
             viewmodel.bindModel(model)
         # prop bindings
-        model.property = viewmodel.property
-        view.property = viewmodel.property
+        model.properties = viewmodel.properties
+        view.properties = viewmodel.properties
 
         # cmd bindings
         view.commands = viewmodel.commands
