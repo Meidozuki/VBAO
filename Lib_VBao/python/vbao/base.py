@@ -2,12 +2,23 @@ from abc import ABC, abstractmethod
 
 
 class CommandBase(ABC):
+    def __init__(self):
+        # predefine None. For convenience of judging whether set parameter
+        self.args = None
+        self.kwargs = None
+
     def setParameter(self, *args, **kwargs):
+        """
+        Set parameters in self.args & self.kwargs
+        """
         self.args = args
         self.kwargs = kwargs
 
     @abstractmethod
     def execute(self):
+        """
+        Prefer call onCommandComplete(self, cmd_name: str, success: bool), other than return bool
+        """
         pass
 
 
