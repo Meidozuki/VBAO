@@ -25,6 +25,12 @@ class PropertyMixin:
     def setProperty(self, key: str, value) -> None:
         self.properties[key] = value
 
+    def setProperty_vbao(self, key: str, value):
+        """
+        self.setProperty() will conflict with Qt. So use an alias
+        """
+        PropertyMixin.setProperty(self, key, value)
+
     def getProperty(self, key: str) -> Optional[Any]:
         if self.hasProperty(key):
             return self.properties[key]
@@ -38,13 +44,12 @@ class CommandMixin:
             print(f'{key} is not a valid command, candidates are {self.commands.keys()}')
             return False
 
-    def setCommand(self, key: str, value) -> None:
+    def setCommand(self, key: str, value: CommandBase) -> None:
         self.commands[key] = value
 
     def getCommand(self, key: str) -> Optional[CommandBase]:
         if self.hasCommand(key):
             return self.commands[key]
-
 
 
 class Model(PropertyMixin):
@@ -53,34 +58,33 @@ class Model(PropertyMixin):
         self.prop_notice = PropertyNotifier()
 
         # self.property will conflict with Qt
-        # TODO: self.setProperty() also conflicts with Qt
         self.properties: Dict[str, Any] = None
 
-    def addPropertyListener(self, listener: PropertyListenerBase):
+    def addPropertyListener_from_vm(self, listener: PropertyListenerBase):
         self.prop_notice.addNotification(listener)
 
     def triggerPropertyNotifications(self, name: str):
         self.prop_notice.triggerPropertyNotifications(name)
 
 
-class ViewModel(PropertyMixin):
+class ViewModel(PropertyMixin, CommandMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prop_notice = PropertyNotifier()
         self.cmd_notice = CommandNotifier()
-        self.listener = None
+        self.prop_listener = None
         self.model = None
 
         self.commands: Dict[str, CommandBase] = DictCons()
         self.properties: Dict[str, Any] = DictCons()
 
-    def addPropertyListener(self, listener: PropertyListenerBase):
+    def addPropertyListener_from_view(self, listener: PropertyListenerBase):
         self.prop_notice.addNotification(listener)
 
     def triggerPropertyNotifications(self, name: str):
         self.prop_notice.triggerPropertyNotifications(name)
 
-    def addCommandListener(self, listener: CommandListenerBase):
+    def addCommandListener_from_view(self, listener: CommandListenerBase):
         self.cmd_notice.addNotification(listener)
 
     def triggerCommandNotifications(self, name: str, success: bool):
@@ -89,8 +93,8 @@ class ViewModel(PropertyMixin):
     def bindModel(self, model: Model):
         self.model = model
 
-    def setListener(self, listener):
-        self.listener = listener
+    def setListener(self, listener: PropertyListenerBase):
+        self.prop_listener = listener
 
     def runCommand(self, cmd_name: str):
         """
@@ -123,7 +127,8 @@ class View(PropertyMixin):
 
 class App:
     @classmethod
-    def bind(cls, model, viewmodel, view, bind_vm_n_model=False, *, debug_set_vm_in_view=False):
+    def bind(cls, model: Model, viewmodel: ViewModel, view: View,
+             bind_vm_n_model=False, *, debug_set_vm_in_view=False):
         if bind_vm_n_model:
             viewmodel.bindModel(model)
         if debug_set_vm_in_view:
@@ -136,6 +141,6 @@ class App:
         view.commands = viewmodel.commands
 
         # event notification
-        model.addPropertyListener(viewmodel.listener)
-        viewmodel.addPropertyListener(view.prop_listener)
-        viewmodel.addCommandListener(view.cmd_listener)
+        model.addPropertyListener_from_vm(viewmodel.prop_listener)
+        viewmodel.addPropertyListener_from_view(view.prop_listener)
+        viewmodel.addCommandListener_from_view(view.cmd_listener)
