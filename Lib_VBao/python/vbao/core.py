@@ -1,6 +1,7 @@
-from typing import Optional, Any, Dict
+from typing import *
 
 from .base import *
+from .mixin import PropertyMixin, CommandMixin
 
 DictCons = dict
 
@@ -12,44 +13,6 @@ def use_easydict(b=True):
         DictCons = EasyDict
     else:
         DictCons = dict
-
-
-class PropertyMixin:
-    def hasProperty(self, key: str, verbose: bool = True) -> bool:
-        if key in self.properties:
-            return True
-        elif verbose:
-            print(f'{key} is not a valid property, candidates are {self.properties.keys()}')
-            return False
-
-    def setProperty(self, key: str, value) -> None:
-        self.properties[key] = value
-
-    def setProperty_vbao(self, key: str, value):
-        """
-        self.setProperty() will conflict with Qt. So use an alias
-        """
-        PropertyMixin.setProperty(self, key, value)
-
-    def getProperty(self, key: str) -> Optional[Any]:
-        if self.hasProperty(key):
-            return self.properties[key]
-
-
-class CommandMixin:
-    def hasCommand(self, key: str, verbose: bool = True) -> bool:
-        if key in self.commands:
-            return True
-        elif verbose:
-            print(f'{key} is not a valid command, candidates are {self.commands.keys()}')
-            return False
-
-    def setCommand(self, key: str, value: CommandBase) -> None:
-        self.commands[key] = value
-
-    def getCommand(self, key: str) -> Optional[CommandBase]:
-        if self.hasCommand(key):
-            return self.commands[key]
 
 
 class Model(PropertyMixin):
@@ -107,7 +70,7 @@ class ViewModel(PropertyMixin, CommandMixin):
         self.commands.get(cmd_name).execute()
 
 
-class View(PropertyMixin):
+class View(PropertyMixin, CommandMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prop_listener = None
