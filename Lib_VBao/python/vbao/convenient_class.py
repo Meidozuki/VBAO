@@ -4,6 +4,16 @@ from .base import CommandBase
 from .core import ViewModel
 
 
+class CommandDirectCallMixin(CommandBase, ABC):
+    """
+    can call self.directCall() with parameter in 1 step
+    Unfortunately, without override, in `self.execute` you still need to get the args by `self.args` and `self.kwargs`
+    """
+    def directCall(self, *args, **kwargs):
+        self.setParameter(*args, **kwargs)
+        self.execute()
+
+
 class CommandBaseWithOwner(CommandBase, ABC):
     """
     __init__ receives an argument and stores it in self.owner.
@@ -27,6 +37,9 @@ class CommandBaseWithDict(CommandBase, ABC):
 
 
 class LambdaCommand(CommandBase):
+    """
+    stores a function, and `self.execute` will call it with args passed by `self.setParameter`
+    """
     def __init__(self, function, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not callable(function):

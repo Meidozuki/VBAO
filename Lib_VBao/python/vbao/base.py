@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 
 
 class CommandBase(ABC):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         # predefine None. For convenience of judging whether set parameter
         self.args = None
         self.kwargs = None
