@@ -52,12 +52,16 @@ class DictMixinHelper:
             return True
         elif verbose:
             print(f'{key} is not a valid {self.attribute}, candidates are {self._inner_dict.keys()}')
-            return False
+        return False
 
-    def getValue(self, key: str) -> Optional[Any]:
+    def getValue(self, key: str, verbose: bool = False) -> Optional[Any]:
+        # if hit, needn't call
         if key in self._inner_dict:
             return self._inner_dict[key]
         else:
+            if verbose:
+                # already miss, just for the output
+                self.find(key, True)
             return None
 
 
@@ -71,8 +75,8 @@ class PropertyMixinImpl:
         return self._prop_mixin_helper.emplace(key, value)
 
     @addDoc
-    def getProperty(self, key: str) -> Optional[Any]:
-        return self._prop_mixin_helper.getValue(key)
+    def getProperty(self, key: str, *args, **kwargs) -> Optional[Any]:
+        return self._prop_mixin_helper.getValue(key, *args, **kwargs)
 
     @addDoc
     def hasProperty(self, key: str, verbose: bool = True) -> bool:
@@ -90,12 +94,43 @@ class CommandMixinImpl:
         self._cmd_mixin_helper.emplace(key, value)
 
     @addDoc
-    def getCommand(self, key: str) -> Optional[CommandBase]:
-        return self._cmd_mixin_helper.getValue(key)
+    def getCommand(self, key: str, *args, **kwargs) -> Optional[CommandBase]:
+        return self._cmd_mixin_helper.getValue(key, *args, **kwargs)
 
     @addDoc
     def hasCommand(self, key: str, verbose: bool = True) -> bool:
         return self._cmd_mixin_helper.find(key, verbose)
+
+    def runCommand(self, cmd_name: str):
+        cmd = self.getCommand(cmd_name, verbose=True)
+        if cmd:
+            cmd.execute()
+
+        self.commands.get(cmd_name).execute()
+
+    def registerCommands(self, commands: Dict[str, Union[Type, CommandBase]]):
+        """
+        convenient function for register multiple commands.
+        :param commands: dict. Key: str. Value: CommandBase subclass or instance.
+        :return: a list contains invalid inputs
+        """
+        fail = []
+        for key, cmd in commands.items():
+            flag = True
+            if isinstance(cmd, type):
+                if issubclass(cmd, CommandBase):
+                    cmd = cmd(self)
+                else:
+                    flag = False
+            elif not isinstance(cmd, CommandBase):
+                flag = False
+
+            if flag:
+                self.setCommand(key, cmd)
+            else:
+                print(f"registerCommands expect a CommandBase class or instance, but received {cmd} {type(cmd)}")
+                fail.append((key, cmd))
+        return fail
 
 
 class PropertyMixinAvoidCollide(PropertyMixinImpl):

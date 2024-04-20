@@ -93,16 +93,6 @@ class ViewModel(PropertyMixin, CommandMixin):
     def setListener(self, listener: PropertyListenerBase):
         self._prop_listener = listener
 
-    def runCommand(self, cmd_name: str):
-        """
-        Deprecated. Prefer to run command in View.
-        """
-        if cmd_name not in self.commands.keys():
-            raise ValueError(f"Trying to call an invalid command {cmd_name}. "
-                             f"Candidates are: {self.commands.keys()}")
-
-        self.commands.get(cmd_name).execute()
-
 
 class View(PropertyMixin, CommandMixin):
     def __init__(self, *args, **kwargs):
@@ -113,13 +103,6 @@ class View(PropertyMixin, CommandMixin):
         # None here means it should be set by App.bind()
         self.commands: Dict[str, CommandBase] = None
         self.properties: Dict[str, Any] = None
-
-    def runCommand(self, cmd_name: str):
-        if cmd_name not in self.commands.keys():
-            raise ValueError(f"Trying to call an invalid command {cmd_name}. "
-                             f"Candidates are: {self.commands.keys()}")
-
-        self.commands.get(cmd_name).execute()
 
 
 class App:
