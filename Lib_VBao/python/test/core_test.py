@@ -1,13 +1,11 @@
 import logging
-import os, sys
 import re
 
 import unittest
 from unittest.mock import patch
 import pytest
 
-sys.path.insert(0, os.path.abspath('..'))
-import vbao
+from test_util import vbao
 
 
 class TestEnv(unittest.TestCase):
@@ -85,8 +83,6 @@ class TestVBAOCore:
         self._setup_basic_model_vm()
 
         assert len(caplog.records) == 0
-
-
 
 
 if __name__ == '__main__':

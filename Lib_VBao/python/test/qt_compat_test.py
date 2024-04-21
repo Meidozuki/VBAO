@@ -1,9 +1,7 @@
 import logging
-import os, sys
 import pytest
 
-sys.path.insert(0, os.path.abspath('..'))
-import vbao
+from test_util import vbao
 
 
 # test Qt compatible
