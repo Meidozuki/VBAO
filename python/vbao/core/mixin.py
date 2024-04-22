@@ -144,13 +144,12 @@ class CommandMixinImpl:
         return fail
 
 
-def _create_property_mix_in(name):
+def _create_property_mix_in():
     from vbao.config import ConfigOption as Opt
     configs = _config.get()
 
     if Opt.kOriginalMixin in configs:
         return PropertyMixinImpl
-
 
     def __init__(self, *args, **kwargs):
         super(PropertyMixin, self).__init__(*args, **kwargs)
@@ -163,12 +162,12 @@ def _create_property_mix_in(name):
         "hasProperty": PropertyMixinImpl.hasProperty,
     }
 
-    avoid_func = ("getProperty", "setProperty", "getCommand", "setCommand")
+    avoid_func = ("getProperty", "setProperty", "hasProperty", "getCommand", "setCommand")
     if Opt.kAddSuffix in configs:
         for ori_name in avoid_func:
             if ori_name in attrs:
                 attrs[ori_name + '_vbao'] = attrs[ori_name]
-    return type(name, (object,), attrs)
+    return type('PropertyMixin', (object,), attrs)
 
 
 class PropertyMixinAvoidCollide(PropertyMixinImpl):
@@ -186,4 +185,4 @@ class PropertyMixinAvoidCollide(PropertyMixinImpl):
 
 CommandMixin = CommandMixinImpl
 # PropertyMixin = PropertyMixinImpl
-PropertyMixin = _create_property_mix_in('PropertyMixin')
+PropertyMixin = _create_property_mix_in()

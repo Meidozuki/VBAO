@@ -14,6 +14,7 @@
 
 import enum
 import logging
+import warnings
 from typing import Dict, FrozenSet
 
 # ------ detect Qt ------
@@ -91,7 +92,7 @@ class _ConfigSingleton:
     def get(self) -> FrozenSet[ConfigOption]:
         if not self.frozen:
             self.frozen = True
-            print('vbao config is freezing with', self._dict)
+            logging.info(f'vbao config is freezing with {self._dict}')
 
             res = []
             if self._dict['original_mixin']:
@@ -104,6 +105,12 @@ class _ConfigSingleton:
 
             self.ret = frozenset(res)
         return self.ret
+
+    def _debug_reset(self):
+        warnings.warn(
+            "The '_debug_reset' method is intended for internal use only and should not be called directly. ",
+            DeprecationWarning, stacklevel=2)
+        self.frozen = False
 
 
 _config = _ConfigSingleton()
@@ -131,7 +138,7 @@ def setConfig(original_mixin=None,
 DictCons = dict
 
 
-def use_easydict(use: bool = True):
+def useEasydict(use: bool = True):
     global DictCons
     # DictCons will be used by Model, etc. And they will lock the config, so now do not explicitly lock
     if _config_frozen():

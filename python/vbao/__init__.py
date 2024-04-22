@@ -13,7 +13,7 @@ def lazy_import(name):
 
 
 from .base import CommandBase, CommandListenerBase, PropertyListenerBase
-from .config import qt_installed, setConfig
+from .config import qt_installed, setConfig, useEasydict
 from .convenient_class import *
 
 core = lazy_import('vbao.core')
