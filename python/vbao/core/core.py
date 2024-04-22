@@ -14,19 +14,9 @@
 import logging
 from typing import *
 
-from .base import *
+from vbao.base import *
+from vbao.config import DictCons
 from .mixin import PropertyMixin, CommandMixin
-
-DictCons = dict
-
-
-def use_easydict(b=True):
-    global DictCons
-    if b:
-        from easydict import EasyDict
-        DictCons = EasyDict
-    else:
-        DictCons = dict
 
 
 class Model(PropertyMixin):

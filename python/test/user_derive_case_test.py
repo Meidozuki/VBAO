@@ -26,7 +26,7 @@ class CollideClass:
         pass
 
 
-base = {'Model': vbao.Model, 'ViewModel': vbao.ViewModel, 'View': vbao.View}
+base = {'Model': vbao.core.Model, 'ViewModel': vbao.core.ViewModel, 'View': vbao.core.View}
 user_class = {'NoArg': NoArgClass, 'WithArg': WithArgClass, 'Collide': CollideClass}
 mro_suffix = {True: '_MROLeft', False: '_MRORight'}
 

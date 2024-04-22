@@ -14,12 +14,9 @@
 from typing import *
 from functools import wraps
 
-from .config import qt_installed
-from .base import CommandBase
+from vbao.config import _config, ConfigOption
+from vbao.base import CommandBase
 
-
-# avoid_qt = True
-# keep_old_alias = False
 
 def addDoc(function):
     s = ('You may see a function with suffix _vbao, which is the same as this one, '
@@ -31,10 +28,24 @@ def addDoc(function):
     return function
 
 
+# The avoidance acts like a metaclass
+# But qt has its own metaclass (Shiboken.ObjectType) and will throw a TypeError
+# So cannot use metaclass
+# See https://docs.python.org/3/reference/datamodel.html#metaclasses
+
+
 # It can be done via an if-statement in class definition
 # But by doing so, type hint in PyCharm will be a mess
 # So use subclasses to get a better type hint
+
+
 class DictMixinHelper:
+    """
+    We use MixinHelper to reduce repeated codes
+    But property and command both have their own target attribute
+    So this is an aggregation, not a generalization
+    """
+
     def __init__(self, obj, attribute: str):
         assert isinstance(attribute, str)
         self.attribute = attribute
@@ -133,16 +144,37 @@ class CommandMixinImpl:
         return fail
 
 
+def _create_property_mix_in(name):
+    from vbao.config import ConfigOption as Opt
+    configs = _config.get()
+
+    if Opt.kOriginalMixin in configs:
+        return PropertyMixinImpl
+
+
+    def __init__(self, *args, **kwargs):
+        super(PropertyMixin, self).__init__(*args, **kwargs)
+        self._prop_mixin_helper = DictMixinHelper(self, 'properties')
+
+    attrs = {
+        "__init__": __init__,
+        "setProperty": PropertyMixinImpl.setProperty,
+        "getProperty": PropertyMixinImpl.getProperty,
+        "hasProperty": PropertyMixinImpl.hasProperty,
+    }
+
+    avoid_func = ("getProperty", "setProperty", "getCommand", "setCommand")
+    if Opt.kAddSuffix in configs:
+        for ori_name in avoid_func:
+            if ori_name in attrs:
+                attrs[ori_name + '_vbao'] = attrs[ori_name]
+    return type(name, (object,), attrs)
+
+
 class PropertyMixinAvoidCollide(PropertyMixinImpl):
     setProperty_vbao = PropertyMixinImpl.setProperty
     getProperty_vbao = PropertyMixinImpl.getProperty
     hasProperty_vbao = PropertyMixinImpl.hasProperty
-
-
-class CommandMixinAvoidCollide(CommandMixinImpl):
-    setCommand_vbao = CommandMixinImpl.setCommand
-    getCommand_vbao = CommandMixinImpl.getCommand
-    hasCommand_vbao = CommandMixinImpl.hasCommand
 
 
 # if qt_installed:
@@ -152,5 +184,6 @@ class CommandMixinAvoidCollide(CommandMixinImpl):
 #     CommandMixin = CommandMixinImpl
 #     PropertyMixin = PropertyMixinImpl
 
-CommandMixin = CommandMixinAvoidCollide
-PropertyMixin = PropertyMixinAvoidCollide
+CommandMixin = CommandMixinImpl
+# PropertyMixin = PropertyMixinImpl
+PropertyMixin = _create_property_mix_in('PropertyMixin')

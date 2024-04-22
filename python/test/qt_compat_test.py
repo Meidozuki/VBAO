@@ -13,11 +13,11 @@ except ImportError:
 
 
 class TestQtCompatible:
-    class ViewModelDerive_MROLeft(vbao.ViewModel, QObject):
+    class ViewModelDerive_MROLeft(vbao.core.ViewModel, QObject):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
 
-    class ViewModelDerive_MRORight(QObject, vbao.ViewModel):
+    class ViewModelDerive_MRORight(QObject, vbao.core.ViewModel):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
 

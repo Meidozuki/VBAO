@@ -16,7 +16,6 @@ from functools import wraps
 from typing import final
 
 from .base import CommandBase, CommandListenerBase, PropertyListenerBase
-from .core import ViewModel
 
 
 @final
@@ -59,9 +58,9 @@ class CommandBaseWithOwner(CommandBase, ABC):
     __init__ receives an argument and stores it in self.owner.
     """
 
-    def __init__(self, owner: ViewModel, *args, **kwargs):
+    def __init__(self, owner, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.owner: ViewModel = owner
+        self.owner: vbao.core.ViewModel = owner
 
 
 class CommandBaseWithDict(CommandBase, ABC):

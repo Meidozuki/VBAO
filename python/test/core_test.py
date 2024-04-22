@@ -2,13 +2,15 @@ import logging
 import re
 
 import unittest
-from unittest.mock import patch
 import pytest
 
 from test_util import vbao
+from vbao.core import Model, ViewModel, View
 
 
 class TestEnv(unittest.TestCase):
+    from unittest.mock import patch
+
     def test_error(self):
         with self.assertRaises(TypeError):
             raise TypeError
@@ -30,6 +32,15 @@ class TestEnv(unittest.TestCase):
     #     self.assertTrue(mocked.called)
 
 
+def test_namespace():
+    with pytest.raises(AttributeError):
+        vbao.Model()
+    with pytest.raises(AttributeError):
+        vbao.ViewModel()
+    with pytest.raises(AttributeError):
+        vbao.View()
+
+
 class TestVBAOConstructor:
     def test_command(self):
         with pytest.raises(TypeError, match="^Can't instantiate abstract class"):
@@ -44,13 +55,13 @@ class TestVBAOConstructor:
             vbao.CommandListenerBase(None)
 
     def test_model(self):
-        model = vbao.Model()
+        model = Model()
 
     def test_viewmodel(self):
-        viewmodel = vbao.ViewModel()
+        viewmodel = ViewModel()
 
     def test_view(self):
-        view = vbao.View()
+        view = View()
 
 
 class TempPropListener(vbao.PropertyListenerBase):
@@ -59,13 +70,9 @@ class TempPropListener(vbao.PropertyListenerBase):
 
 
 class TestVBAOCore:
-    @classmethod
-    def setup_class(cls):
-        pass
-
     def test_vm_bind_model_no_listener(self, caplog):
-        model = vbao.Model()
-        viewmodel = vbao.ViewModel()
+        model = Model()
+        viewmodel = ViewModel()
         viewmodel.bindModel(model, verbose=True)
 
         records = caplog.records
@@ -74,8 +81,8 @@ class TestVBAOCore:
         assert re.search('binding Model to VM', caplog.text)
 
     def _setup_basic_model_vm(self):
-        self.model = vbao.Model()
-        self.viewmodel = vbao.ViewModel()
+        self.model = Model()
+        self.viewmodel = ViewModel()
         self.viewmodel.setListener(TempPropListener(self.viewmodel))
         self.viewmodel.bindModel(self.model, verbose=True)
 
