@@ -12,7 +12,7 @@
 # If not, see <https://www.gnu.org/licenses/>.
 
 from typing import *
-from functools import wraps
+from functools import wraps, partial
 
 from vbao.config import _config, ConfigOption
 from vbao.base import CommandBase
@@ -144,45 +144,87 @@ class CommandMixinImpl:
         return fail
 
 
-def _create_property_mix_in():
+def _create_both_mixin(property_mixin: type, command_mixin: type):
+    """
+    If both prop&cmd are object, return object
+    And throw AssertionError if only one is object
+    Else, return a class derived from them two
+    """
+    if property_mixin is object or command_mixin is object:
+        assert property_mixin is object and command_mixin is object
+        return object
+    else:
+        class PropCmdMixinImpl(property_mixin, command_mixin):
+            pass
+
+        return PropCmdMixinImpl
+
+
+_PropMixinType = Union[Type[PropertyMixinImpl], Type]
+_CmdMixinType = Union[Type[CommandMixinImpl], Type]
+
+
+def _create_mix_in_class() -> Tuple[_PropMixinType, _CmdMixinType]:
     from vbao.config import ConfigOption as Opt
     configs = _config.get()
 
+    if Opt.kNoMixin in configs:
+        return object, object
     if Opt.kOriginalMixin in configs:
-        return PropertyMixinImpl
+        return PropertyMixinImpl, CommandMixinImpl
+    # else, dynamically create the type
 
-    def __init__(self, *args, **kwargs):
-        super(PropertyMixin, self).__init__(*args, **kwargs)
-        self._prop_mixin_helper = DictMixinHelper(self, 'properties')
+    # 动态创建Mixin时成员按照alpha-beta顺序排序
+    avoid_func = ("getProperty", "hasProperty", "setProperty",
+                  "getCommand", "hasCommand", "setCommand")
+    prop_copy_attrs = ("getProperty", "hasProperty", "setProperty")
+    cmd_copy_attrs = ("getCommand", "hasCommand", "registerCommands", "runCommand", "setCommand")
 
-    attrs = {
-        "__init__": __init__,
-        "setProperty": PropertyMixinImpl.setProperty,
-        "getProperty": PropertyMixinImpl.getProperty,
-        "hasProperty": PropertyMixinImpl.hasProperty,
-    }
+    def dict_op(d, iterable, fn):
+        for item in iterable:
+            fn(d, item)
 
-    avoid_func = ("getProperty", "setProperty", "hasProperty", "getCommand", "setCommand")
-    if Opt.kAddSuffix in configs:
-        for ori_name in avoid_func:
-            if ori_name in attrs:
-                attrs[ori_name + '_vbao'] = attrs[ori_name]
-    return type('PropertyMixin', (object,), attrs)
+    def add_suffix(d, key):
+        if key in d:
+            d[key + '_vbao'] = d[key]
+
+    def copy_attributes(cls, d, attr):
+        d[attr] = getattr(cls, attr)
+
+    def create_property_mix_in(copy_attrs):
+        nonlocal configs, avoid_func
+        if Opt.kOriginalMixin in configs:
+            return PropertyMixinImpl
+
+        def __init__(self, *args, **kwargs):
+            super(PropertyMixin, self).__init__(*args, **kwargs)
+            self._prop_mixin_helper = DictMixinHelper(self, 'properties')
+
+        namespace = {"__init__": __init__}
+        dict_op(namespace, copy_attrs, partial(copy_attributes, PropertyMixinImpl))
+
+        if Opt.kAddSuffix in configs:
+            dict_op(namespace, avoid_func, add_suffix)
+        return type('PropertyMixin', (object,), namespace)
+
+    def create_command_mix_in(copy_attrs):
+        nonlocal configs, avoid_func
+        if Opt.kOriginalMixin in configs:
+            return CommandMixinImpl
+
+        def __init__(self, *args, **kwargs):
+            super(CommandMixin, self).__init__(*args, **kwargs)
+            self._cmd_mixin_helper = DictMixinHelper(self, 'commands')
+
+        namespace = {"__init__": __init__}
+        dict_op(namespace, copy_attrs, partial(copy_attributes, CommandMixinImpl))
+
+        if Opt.kAddSuffix in configs:
+            dict_op(namespace, avoid_func, add_suffix)
+        return type('CommandMixin', (object,), namespace)
+
+    return create_property_mix_in(prop_copy_attrs), create_command_mix_in(cmd_copy_attrs)
 
 
-class PropertyMixinAvoidCollide(PropertyMixinImpl):
-    setProperty_vbao = PropertyMixinImpl.setProperty
-    getProperty_vbao = PropertyMixinImpl.getProperty
-    hasProperty_vbao = PropertyMixinImpl.hasProperty
-
-
-# if qt_installed:
-#     CommandMixin = CommandMixinAvoidCollide
-#     PropertyMixin = PropertyMixinAvoidCollide
-# else:
-#     CommandMixin = CommandMixinImpl
-#     PropertyMixin = PropertyMixinImpl
-
-CommandMixin = CommandMixinImpl
-# PropertyMixin = PropertyMixinImpl
-PropertyMixin = _create_property_mix_in()
+PropertyMixin, CommandMixin = _create_mix_in_class()
+PropertyCommandMixin = _create_both_mixin(PropertyMixin, CommandMixin)

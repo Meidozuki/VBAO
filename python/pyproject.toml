@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vbao_MVVM"
-version = "0.2.1"
+version = "0.3a1"
 authors = [
-  { name="Meidozuki", email="author@example.com" },
+  { name="Meidozuki"},
 ]
 description = "A library aiming for building an MVVM (or MVFM) project"
 readme = "README.md"

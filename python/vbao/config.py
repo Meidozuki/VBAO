@@ -50,18 +50,21 @@ if qt_installed is None:
 # ------
 
 # ------ VBAO options ------
+from enum import auto
 
 
 @enum.unique
 class ConfigOption(enum.Enum):
     # google C++ enum/const style
-    from enum import auto
     kNotSet = 0
 
-    kNoMixin = auto()
-    kOriginalMixin = auto()
+    kNoMixin = 1
 
-    kAddSuffix = auto()
+    kPropMixinOriginal = 1 << 1
+    kCmdMixinOriginal = 1 << 2
+    kOriginalMixin = kPropMixinOriginal | kCmdMixinOriginal
+
+    kAddSuffix = 1 << 3
     kDropOriginal = auto()
 
 
@@ -71,6 +74,7 @@ class _ConfigSingleton:
         self.ret = None
 
         self._dict: Dict[str, bool] = {
+            'no_mixin': False,
             'original_mixin': False,
             'add_suffix': True,
             'suffix_and_delete_original': False,
@@ -92,10 +96,12 @@ class _ConfigSingleton:
     def get(self) -> FrozenSet[ConfigOption]:
         if not self.frozen:
             self.frozen = True
-            logging.info(f'vbao config is freezing with {self._dict}')
+            print(f'vbao config is freezing with {self._dict}')
 
             res = []
-            if self._dict['original_mixin']:
+            if self._dict['no_mixin']:
+                res.append(ConfigOption.kNoMixin)
+            elif self._dict['original_mixin']:
                 res.append(ConfigOption.kOriginalMixin)
             elif self._dict['add_suffix']:
                 res.append(ConfigOption.kAddSuffix)
@@ -122,7 +128,8 @@ def _config_frozen():
 
 def setConfig(original_mixin=None,
               add_suffix=None,
-              suffix_and_delete_original=None):
+              suffix_and_delete_original=None,
+              no_mixin=None):
     def wrap(**kwargs):
         for k, v in kwargs.items():
             if v is not None:
@@ -130,7 +137,8 @@ def setConfig(original_mixin=None,
 
     wrap(original_mixin=original_mixin,
          add_suffix=add_suffix,
-         suffix_and_delete_original=suffix_and_delete_original)
+         suffix_and_delete_original=suffix_and_delete_original,
+         no_mixin=no_mixin)
 
 
 # ------ for vbao.core ------

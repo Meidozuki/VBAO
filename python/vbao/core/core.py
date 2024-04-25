@@ -16,7 +16,7 @@ from typing import *
 
 from vbao.base import *
 from vbao.config import DictCons
-from .mixin import PropertyMixin, CommandMixin
+from .mixin import PropertyMixin, CommandMixin, PropertyCommandMixin
 
 
 class Model(PropertyMixin):
@@ -38,7 +38,7 @@ class Model(PropertyMixin):
         self._prop_notice.triggerPropertyNotifications(name)
 
 
-class ViewModel(PropertyMixin, CommandMixin):
+class ViewModel(PropertyCommandMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._prop_notice = PropertyNotifier()
@@ -84,7 +84,7 @@ class ViewModel(PropertyMixin, CommandMixin):
         self._prop_listener = listener
 
 
-class View(PropertyMixin, CommandMixin):
+class View(PropertyCommandMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prop_listener = None
