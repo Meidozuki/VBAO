@@ -2,7 +2,7 @@
 
 > A lite library aiming for building an MVVM (or MVFM) project.
 
-VBAO这个名字取自《gosick》女主角维多利加的爱称维包。
+VBAO这个名字取自《gosick》女主角维多利加的爱称维包子。
 
 ![](img/gosick.png)
 

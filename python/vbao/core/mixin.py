@@ -14,7 +14,7 @@
 from typing import *
 from functools import wraps, partial
 
-from vbao.config import _config, ConfigOption
+from vbao.config import _config
 from vbao.base import CommandBase
 
 
@@ -32,11 +32,6 @@ def addDoc(function):
 # But qt has its own metaclass (Shiboken.ObjectType) and will throw a TypeError
 # So cannot use metaclass
 # See https://docs.python.org/3/reference/datamodel.html#metaclasses
-
-
-# It can be done via an if-statement in class definition
-# But by doing so, type hint in PyCharm will be a mess
-# So use subclasses to get a better type hint
 
 
 class DictMixinHelper:
