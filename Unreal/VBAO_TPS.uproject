@@ -12,6 +12,10 @@
 	],
 	"Plugins": [
 		{
+			"Name": "VbaoViewModel",
+			"Enabled": true
+		},
+		{
 			"Name": "ModelViewViewModel",
 			"Enabled": true
 		}
