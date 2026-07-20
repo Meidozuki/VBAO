@@ -7,6 +7,7 @@ public class VbaoViewModel : ModuleRules
 	public VbaoViewModel(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+		CppStandard = CppStandardVersion.Latest;
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
@@ -25,7 +26,7 @@ public class VbaoViewModel : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", "CoreUObject",
+				"Core", "CoreUObject", "ModelViewViewModel",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
