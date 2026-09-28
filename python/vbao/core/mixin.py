@@ -112,7 +112,6 @@ class CommandMixinImpl:
         if cmd:
             cmd.execute()
 
-        self.commands.get(cmd_name).execute()
 
     def registerCommands(self, commands: Dict[str, Union[Type, CommandBase]]):
         """
