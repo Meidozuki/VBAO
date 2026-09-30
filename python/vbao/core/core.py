@@ -45,10 +45,14 @@ class ViewModel(PropertyCommandMixin):
         self._cmd_notice = CommandNotifier()
         self._prop_listener = None
         # Viewmodel contains Model, the result of running “commands” of Model can be directly seen
-        self.model = None  # lots of operations will be done with Model, model is better than _model
+        self.model = None  # plenty of operations will be done with Model, model is better than _model
 
         self.commands: Dict[str, CommandBase] = DictCons()
         self.properties: Dict[str, Any] = DictCons()
+        
+    @property
+    def isModelSet(self):
+        return self.model is not None
 
     def addPropertyListener_from_view(self, listener: PropertyListenerBase):
         if not isinstance(listener, PropertyListenerBase):
@@ -72,13 +76,10 @@ class ViewModel(PropertyCommandMixin):
         model.properties = self.properties
         if self._prop_listener is None:
             if verbose:
-                logging.warning("You are binding Model to VM without a listener, set verbose=True to suppress warning.")
+                logging.warning("You are binding Model to VM without a listener, set verbose=False to suppress warning.")
         else:
             model.addPropertyListener_from_vm(self._prop_listener)
 
-    @property
-    def isModelSet(self):
-        return self.model is not None
 
     def setListener(self, listener: PropertyListenerBase):
         self._prop_listener = listener

@@ -64,10 +64,10 @@ class NotificationHolder:
         elif isinstance(input, (PropertyListenerBase, CommandListenerBase)):
             self.arr.append(input)
         else:
-            print("Not invalid type",input)
+            raise TypeError(f"expect PropertyListenerBase or CommandListenerBase, but get {type(input)}")
 
     def removeNotification(self, x):
-        if isinstance(input, (PropertyListenerBase, CommandListenerBase)):
+        if isinstance(x, (PropertyListenerBase, CommandListenerBase)):
             self.arr.remove(x)
 
     def clear(self):
