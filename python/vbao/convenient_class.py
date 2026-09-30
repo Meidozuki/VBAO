@@ -15,7 +15,7 @@ from abc import ABC
 from functools import wraps
 from typing import final
 
-from .base import CommandBase, CommandListenerBase, PropertyListenerBase
+from .interfaces import CommandBase, CommandListenerBase, PropertyListenerBase
 
 
 @final

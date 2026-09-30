@@ -85,13 +85,13 @@ class TestMixin:
             assert hasattr(obj, fn + '_vbao')
 
     def test_no_mixin_config(self):
-        import vbao.core.core
+        import vbao.core.mvvm
         mixin = self.setConfigAndReload(no_mixin=True)
         assert mixin.PropertyMixin is object
         assert mixin.CommandMixin is object
         assert mixin.PropertyCommandMixin is object
 
-        core = importlib.reload(vbao.core.core)
+        core = importlib.reload(vbao.core.mvvm)
         # assert direct derive from object
         # if error, pytest will print mro() list
         for cls in (core.Model, core.ViewModel, core.View):

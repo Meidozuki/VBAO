@@ -14,7 +14,8 @@
 import logging
 from typing import *
 
-from vbao.base import *
+from vbao.interfaces import CommandBase, CommandListenerBase, PropertyListenerBase
+from vbao.notifier import CommandNotifier, PropertyNotifier
 from vbao.config import DictCons
 from .mixin import PropertyMixin, CommandMixin, PropertyCommandMixin
 

@@ -12,7 +12,7 @@ def lazy_import(name):
     return module
 
 
-from .base import CommandBase, CommandListenerBase, PropertyListenerBase
+from .interfaces import CommandBase, CommandListenerBase, PropertyListenerBase
 from .config import qt_installed, setConfig, useEasydict
 from .convenient_class import *
 

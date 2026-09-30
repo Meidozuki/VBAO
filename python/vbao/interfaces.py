@@ -52,35 +52,3 @@ class CommandListenerBase(ABC):
     @abstractmethod
     def onCommandComplete(self, cmd_name: str, success: bool):
         pass
-
-
-class NotificationHolder:
-    def __init__(self):
-        self.arr = []
-
-    def addNotification(self, input):
-        if input is None:
-            return
-        elif isinstance(input, (PropertyListenerBase, CommandListenerBase)):
-            self.arr.append(input)
-        else:
-            raise TypeError(f"expect PropertyListenerBase or CommandListenerBase, but get {type(input)}")
-
-    def removeNotification(self, x):
-        if isinstance(x, (PropertyListenerBase, CommandListenerBase)):
-            self.arr.remove(x)
-
-    def clear(self):
-        self.arr.clear()
-
-
-class PropertyNotifier(NotificationHolder):
-    def triggerPropertyNotifications(self, name):
-        for listener in self.arr:
-            listener.onPropertyChanged(name)
-
-
-class CommandNotifier(NotificationHolder):
-    def triggerCommandNotifications(self, name, success):
-        for listener in self.arr:
-            listener.onCommandComplete(name, success)

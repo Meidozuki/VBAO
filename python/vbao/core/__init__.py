@@ -1,2 +1,2 @@
 
-from .core import Model, ViewModel, View, App
+from .mvvm import Model, ViewModel, View, App

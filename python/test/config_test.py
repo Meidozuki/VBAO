@@ -28,12 +28,12 @@ class TestConfig:
         reset()  # This is important!
 
     def reloadCore(self):
-        # core.py will import DictCons, which will not change after importing.
+        # mvvm.py will import DictCons, which will not change after importing.
         # In one-time run, the classes are always loaded after config.
-        # But in unittest env, the core.py classes are fixed after the first time import,
+        # But in unittest env, the mvvm.py classes are fixed after the first time import,
         # so here we need to reload to get the newest change
-        import vbao.core.core
-        return importlib.reload(vbao.core.core)
+        import vbao.core.mvvm
+        return importlib.reload(vbao.core.mvvm)
 
     def assertConfigWarning(self, records):
         assert len(records) == 1

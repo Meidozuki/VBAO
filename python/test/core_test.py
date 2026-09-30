@@ -5,7 +5,7 @@ import unittest
 import pytest
 
 from test_util import vbao
-from vbao.base import PropertyNotifier, CommandNotifier
+from vbao.notifier import PropertyNotifier, CommandNotifier
 from vbao.core import Model, ViewModel, View, App
 
 

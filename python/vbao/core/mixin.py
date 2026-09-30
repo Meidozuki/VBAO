@@ -14,7 +14,7 @@
 from typing import *
 from functools import wraps, partial
 
-from vbao.base import CommandBase
+from vbao.interfaces import CommandBase
 
 
 def addDoc(function):
