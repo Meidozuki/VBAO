@@ -14,7 +14,6 @@
 from typing import *
 from functools import wraps, partial
 
-from vbao.config import _config
 from vbao.base import CommandBase
 
 
@@ -159,35 +158,41 @@ _CmdMixinType = Union[Type[CommandMixinImpl], Type]
 
 
 def _create_mix_in_class() -> Tuple[_PropMixinType, _CmdMixinType]:
-    from vbao.config import ConfigOption as Opt
+    """
+    Dynamically build the PropertyMixin and CommandMixin classes based on the config,
+    to avoid method name collisions with third-party libs like Qt.
+
+    The return value depends on the flags in ConfigSingleton:
+    - kNoMixin: mixins are disabled, return (object, object);
+    - kOriginalMixin: return the original classes (PropertyMixinImpl, CommandMixinImpl);
+    - otherwise: create new classes via type(), copying methods from the impl classes.
+        If kAddSuffix is set, each method gets a "_vbao"-suffixed alias
+    """
+    from vbao.config import _config
+    from vbao.config import ConfigOption as Options
     configs = _config.get()
 
-    if Opt.kNoMixin in configs:
+    if Options.kNoMixin in configs:
         return object, object
-    if Opt.kOriginalMixin in configs:
+    if Options.kOriginalMixin in configs:
         return PropertyMixinImpl, CommandMixinImpl
     # else, dynamically create the type
 
-    # 动态创建Mixin时成员按照alpha-beta顺序排序
-    avoid_func = ("getProperty", "hasProperty", "setProperty",
-                  "getCommand", "hasCommand", "setCommand")
-    prop_copy_attrs = ("getProperty", "hasProperty", "setProperty")
-    cmd_copy_attrs = ("getCommand", "hasCommand", "registerCommands", "runCommand", "setCommand")
 
-    def dict_op(d, iterable, fn):
-        for item in iterable:
-            fn(d, item)
+    def dict_op(d:dict, iterable, fn):
+        for it in iterable:
+            fn(d, it)
 
-    def add_suffix(d, key):
-        if key in d:
-            d[key + '_vbao'] = d[key]
+    def add_suffixed_attrs(d:dict, attr_name:str):
+        if attr_name in d:
+            d[attr_name + '_vbao'] = d[attr_name]
 
-    def copy_attributes(cls, d, attr):
-        d[attr] = getattr(cls, attr)
+    def copy_attributes(template_class:type, out_dict:dict, attr:str):
+        out_dict[attr] = getattr(template_class, attr)
 
-    def create_property_mix_in(copy_attrs):
+    def create_property_mix_in(copy_attrs:Iterable[str]):
         nonlocal configs, avoid_func
-        if Opt.kOriginalMixin in configs:
+        if Options.kOriginalMixin in configs:
             return PropertyMixinImpl
 
         def __init__(self, *args, **kwargs):
@@ -197,13 +202,13 @@ def _create_mix_in_class() -> Tuple[_PropMixinType, _CmdMixinType]:
         namespace = {"__init__": __init__}
         dict_op(namespace, copy_attrs, partial(copy_attributes, PropertyMixinImpl))
 
-        if Opt.kAddSuffix in configs:
-            dict_op(namespace, avoid_func, add_suffix)
+        if Options.kAddSuffix in configs:
+            dict_op(namespace, avoid_func, add_suffixed_attrs)
         return type('PropertyMixin', (object,), namespace)
 
-    def create_command_mix_in(copy_attrs):
+    def create_command_mix_in(copy_attrs:Iterable[str]):
         nonlocal configs, avoid_func
-        if Opt.kOriginalMixin in configs:
+        if Options.kOriginalMixin in configs:
             return CommandMixinImpl
 
         def __init__(self, *args, **kwargs):
@@ -213,9 +218,15 @@ def _create_mix_in_class() -> Tuple[_PropMixinType, _CmdMixinType]:
         namespace = {"__init__": __init__}
         dict_op(namespace, copy_attrs, partial(copy_attributes, CommandMixinImpl))
 
-        if Opt.kAddSuffix in configs:
-            dict_op(namespace, avoid_func, add_suffix)
+        if Options.kAddSuffix in configs:
+            dict_op(namespace, avoid_func, add_suffixed_attrs)
         return type('CommandMixin', (object,), namespace)
+
+    # These tuples should be sort in dictionary order
+    avoid_func = ("getProperty", "hasProperty", "setProperty",
+                  "getCommand", "hasCommand", "setCommand")
+    prop_copy_attrs = ("getProperty", "hasProperty", "setProperty")
+    cmd_copy_attrs = ("getCommand", "hasCommand", "registerCommands", "runCommand", "setCommand")
 
     return create_property_mix_in(prop_copy_attrs), create_command_mix_in(cmd_copy_attrs)
 
